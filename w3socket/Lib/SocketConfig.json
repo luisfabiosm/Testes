@@ -1,0 +1,10 @@
+﻿{
+  "TcpSocket": {
+    "maxConnectionAttempts": 30,
+    "intervalBetweenConnectionAttemptsInMs": 500,
+    "receiveBufferSize": 2048,
+    "logLevel": 0,
+    "delim": "|",
+    "delimRepeated": 3
+  }
+}
