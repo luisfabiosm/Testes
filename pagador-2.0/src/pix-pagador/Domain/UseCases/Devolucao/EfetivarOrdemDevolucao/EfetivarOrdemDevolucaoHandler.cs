@@ -15,7 +15,7 @@ namespace Domain.UseCases.Devolucao.EfetivarOrdemDevolucao
         }
 
 
-        protected override async Task<ValidationResult> ExecuteSpecificValidations(TransactionEfetivarOrdemDevolucao transaction, CancellationToken cancellationToken)
+        public override async Task<ValidationResult> ExecuteSpecificValidations(TransactionEfetivarOrdemDevolucao transaction, CancellationToken cancellationToken)
         {
             var errors = new List<ErrorDetails>();
 
@@ -34,7 +34,7 @@ namespace Domain.UseCases.Devolucao.EfetivarOrdemDevolucao
         }
 
 
-        protected override async Task<JDPIEfetivarOrdemDevolucaoResponse> ExecuteTransactionProcessing(TransactionEfetivarOrdemDevolucao transaction, CancellationToken cancellationToken)
+        public override async Task<JDPIEfetivarOrdemDevolucaoResponse> ExecuteTransactionProcessing(TransactionEfetivarOrdemDevolucao transaction, CancellationToken cancellationToken)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Domain.UseCases.Devolucao.EfetivarOrdemDevolucao
         }
 
 
-        protected override BaseReturn<JDPIEfetivarOrdemDevolucaoResponse> ReturnSuccessResponse(JDPIEfetivarOrdemDevolucaoResponse result, string message, string correlationId)
+        public override BaseReturn<JDPIEfetivarOrdemDevolucaoResponse> ReturnSuccessResponse(JDPIEfetivarOrdemDevolucaoResponse result, string message, string correlationId)
         {
             return BaseReturn<JDPIEfetivarOrdemDevolucaoResponse>.FromSuccess(
                 result,
@@ -63,7 +63,7 @@ namespace Domain.UseCases.Devolucao.EfetivarOrdemDevolucao
             );
         }
 
-        protected override BaseReturn<JDPIEfetivarOrdemDevolucaoResponse> ReturnErrorResponse(Exception exception, string correlationId)
+        public override BaseReturn<JDPIEfetivarOrdemDevolucaoResponse> ReturnErrorResponse(Exception exception, string correlationId)
         {
             return BaseReturn<JDPIEfetivarOrdemDevolucaoResponse>.FromException(exception, correlationId);
         }

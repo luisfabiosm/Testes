@@ -34,7 +34,7 @@ namespace Adapters.Outbound.Logging
             ActivityContext parentContext = default,
             ActivityKind kind = ActivityKind.Internal)
         {
-            var activity = Activity.Source.StartActivity(
+            var activity = Activity?.Source.StartActivity(
                 operationName,
                 kind,
                 parentContext,

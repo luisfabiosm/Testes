@@ -12,7 +12,7 @@ namespace Domain.UseCases.Devolucao.RegistrarOrdemDevolucao
 
         }
 
-        protected override async Task<ValidationResult> ExecuteSpecificValidations(TransactionRegistrarOrdemDevolucao transaction, CancellationToken cancellationToken)
+        public override async Task<ValidationResult> ExecuteSpecificValidations(TransactionRegistrarOrdemDevolucao transaction, CancellationToken cancellationToken)
         {
             var errors = new List<ErrorDetails>();
 
@@ -37,7 +37,7 @@ namespace Domain.UseCases.Devolucao.RegistrarOrdemDevolucao
         }
 
 
-        protected override async Task<JDPIRegistrarOrdemDevolucaoResponse> ExecuteTransactionProcessing(TransactionRegistrarOrdemDevolucao transaction, CancellationToken cancellationToken)
+        public override async Task<JDPIRegistrarOrdemDevolucaoResponse> ExecuteTransactionProcessing(TransactionRegistrarOrdemDevolucao transaction, CancellationToken cancellationToken)
         {
 
             try
@@ -58,7 +58,7 @@ namespace Domain.UseCases.Devolucao.RegistrarOrdemDevolucao
         }
 
 
-        protected override BaseReturn<JDPIRegistrarOrdemDevolucaoResponse> ReturnSuccessResponse(JDPIRegistrarOrdemDevolucaoResponse result, string message, string correlationId)
+        public override BaseReturn<JDPIRegistrarOrdemDevolucaoResponse> ReturnSuccessResponse(JDPIRegistrarOrdemDevolucaoResponse result, string message, string correlationId)
         {
             return BaseReturn<JDPIRegistrarOrdemDevolucaoResponse>.FromSuccess(
                 result,
@@ -68,7 +68,7 @@ namespace Domain.UseCases.Devolucao.RegistrarOrdemDevolucao
         }
 
 
-        protected override BaseReturn<JDPIRegistrarOrdemDevolucaoResponse> ReturnErrorResponse(Exception exception, string correlationId)
+        public override BaseReturn<JDPIRegistrarOrdemDevolucaoResponse> ReturnErrorResponse(Exception exception, string correlationId)
         {
 
             return BaseReturn<JDPIRegistrarOrdemDevolucaoResponse>.FromException(exception, correlationId);

@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Domain.Core.Ports.Domain;
+using System.Runtime.CompilerServices;
 
 namespace Domain.Services
 {
@@ -6,7 +7,7 @@ namespace Domain.Services
     /// Gerador otimizado de CorrelationId usando stack allocation.
     /// Reduz alocações de heap em ~80% comparado a Guid.NewGuid().ToString().
     /// </summary>
-    public sealed class CorrelationIdGenerator
+    public class CorrelationIdGenerator : ICorrelationIdGenerator
     {
         private static readonly ThreadLocal<Random> ThreadRandom =
             new(() => new Random(Environment.TickCount * Thread.CurrentThread.ManagedThreadId));
@@ -15,12 +16,9 @@ namespace Domain.Services
         private const string Characters = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
         private const int DefaultLength = 16; // Suficiente para uniqueness em sistemas distribuídos
 
-        /// <summary>
-        /// Gera um CorrelationId otimizado usando stack allocation.
-        /// Performance: ~10x mais rápido que Guid.NewGuid().ToString()
-        /// </summary>
+     
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public string Generate(int length = DefaultLength)
+        public virtual string Generate(int length = DefaultLength)
         {
             if (length <= 0 || length > 64) // Limite de segurança
                 throw new ArgumentOutOfRangeException(nameof(length), "Tamanho precisa ser entre 1 e 64");
@@ -37,12 +35,9 @@ namespace Domain.Services
             return new string(chars);
         }
 
-        /// <summary>
-        /// Gera CorrelationId com prefixo para identificação de contexto.
-        /// Útil para debugging e troubleshooting.
-        /// </summary>
+  
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public string GenerateWithPrefix(string prefix, int idLength = DefaultLength)
+        public virtual string GenerateWithPrefix(string prefix, int idLength = DefaultLength)
         {
             if (string.IsNullOrEmpty(prefix))
                 return Generate(idLength);
@@ -51,10 +46,8 @@ namespace Domain.Services
             return $"{prefix}-{id}";
         }
 
-        /// <summary>
-        /// Valida se uma string é um CorrelationId válido.
-        /// </summary>
-        public bool IsValid(string correlationId)
+
+        public virtual bool IsValid(string correlationId)
         {
             if (string.IsNullOrWhiteSpace(correlationId))
                 return false;

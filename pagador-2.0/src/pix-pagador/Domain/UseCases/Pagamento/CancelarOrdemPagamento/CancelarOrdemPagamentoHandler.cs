@@ -13,7 +13,7 @@ namespace Domain.UseCases.Pagamento.CancelarOrdemPagamento
 
         }
 
-        protected override async Task<ValidationResult> ExecuteSpecificValidations(TransactionCancelarOrdemPagamento transaction, CancellationToken cancellationToken)
+        public override async Task<ValidationResult> ExecuteSpecificValidations(TransactionCancelarOrdemPagamento transaction, CancellationToken cancellationToken)
         {
             var errors = new List<ErrorDetails>();
 
@@ -30,7 +30,7 @@ namespace Domain.UseCases.Pagamento.CancelarOrdemPagamento
 
 
 
-        protected override async Task<JDPICancelarOrdemPagamentoResponse> ExecuteTransactionProcessing(TransactionCancelarOrdemPagamento transaction, CancellationToken cancellationToken)
+        public override async Task<JDPICancelarOrdemPagamentoResponse> ExecuteTransactionProcessing(TransactionCancelarOrdemPagamento transaction, CancellationToken cancellationToken)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace Domain.UseCases.Pagamento.CancelarOrdemPagamento
         }
 
 
-        protected override BaseReturn<JDPICancelarOrdemPagamentoResponse> ReturnSuccessResponse(JDPICancelarOrdemPagamentoResponse result, string message, string correlationId)
+        public override BaseReturn<JDPICancelarOrdemPagamentoResponse> ReturnSuccessResponse(JDPICancelarOrdemPagamentoResponse result, string message, string correlationId)
         {
             return BaseReturn<JDPICancelarOrdemPagamentoResponse>.FromSuccess(
                 result,
@@ -61,7 +61,7 @@ namespace Domain.UseCases.Pagamento.CancelarOrdemPagamento
 
 
 
-        protected override BaseReturn<JDPICancelarOrdemPagamentoResponse> ReturnErrorResponse(Exception exception, string correlationId)
+        public override BaseReturn<JDPICancelarOrdemPagamentoResponse> ReturnErrorResponse(Exception exception, string correlationId)
         {
             return BaseReturn<JDPICancelarOrdemPagamentoResponse>.FromException(exception, correlationId);
         }

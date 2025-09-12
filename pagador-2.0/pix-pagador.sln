@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{02EA681E-C7D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pix-pagador", "src\pix-pagador\pix-pagador.csproj", "{B9D54D0E-3B7B-DE66-E688-C9394AF61129}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testes", "Testes", "{F4DB216F-B75E-4EA7-978A-F595102F5F09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pix-pagador-testes", "src\pix-pagador-testes\pix-pagador-testes.csproj", "{2DFDC54C-4E39-4969-A391-7DBE5695DEEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +21,17 @@ Global
 		{B9D54D0E-3B7B-DE66-E688-C9394AF61129}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9D54D0E-3B7B-DE66-E688-C9394AF61129}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9D54D0E-3B7B-DE66-E688-C9394AF61129}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DFDC54C-4E39-4969-A391-7DBE5695DEEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DFDC54C-4E39-4969-A391-7DBE5695DEEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DFDC54C-4E39-4969-A391-7DBE5695DEEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DFDC54C-4E39-4969-A391-7DBE5695DEEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B9D54D0E-3B7B-DE66-E688-C9394AF61129} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{2DFDC54C-4E39-4969-A391-7DBE5695DEEB} = {F4DB216F-B75E-4EA7-978A-F595102F5F09}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F6FBDE92-FECE-499B-91AC-869A51DA9015}

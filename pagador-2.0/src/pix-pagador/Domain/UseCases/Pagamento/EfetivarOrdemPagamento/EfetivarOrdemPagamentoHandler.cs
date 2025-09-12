@@ -14,7 +14,7 @@ namespace Domain.UseCases.Pagamento.EfetivarOrdemPagamento
         }
 
 
-        protected override async Task<ValidationResult> ExecuteSpecificValidations(TransactionEfetivarOrdemPagamento transaction, CancellationToken cancellationToken)
+        public override async Task<ValidationResult> ExecuteSpecificValidations(TransactionEfetivarOrdemPagamento transaction, CancellationToken cancellationToken)
         {
             var errors = new List<ErrorDetails>();
 
@@ -30,7 +30,7 @@ namespace Domain.UseCases.Pagamento.EfetivarOrdemPagamento
         }
 
 
-        protected override async Task<JDPIEfetivarOrdemPagamentoResponse> ExecuteTransactionProcessing(TransactionEfetivarOrdemPagamento transaction, CancellationToken cancellationToken)
+        public override async Task<JDPIEfetivarOrdemPagamentoResponse> ExecuteTransactionProcessing(TransactionEfetivarOrdemPagamento transaction, CancellationToken cancellationToken)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace Domain.UseCases.Pagamento.EfetivarOrdemPagamento
         }
 
 
-        protected override BaseReturn<JDPIEfetivarOrdemPagamentoResponse> ReturnSuccessResponse(JDPIEfetivarOrdemPagamentoResponse result, string message, string correlationId)
+        public override BaseReturn<JDPIEfetivarOrdemPagamentoResponse> ReturnSuccessResponse(JDPIEfetivarOrdemPagamentoResponse result, string message, string correlationId)
         {
             return BaseReturn<JDPIEfetivarOrdemPagamentoResponse>.FromSuccess(
                 result,
@@ -60,7 +60,7 @@ namespace Domain.UseCases.Pagamento.EfetivarOrdemPagamento
         }
 
 
-        protected override BaseReturn<JDPIEfetivarOrdemPagamentoResponse> ReturnErrorResponse(Exception exception, string correlationId)
+        public override BaseReturn<JDPIEfetivarOrdemPagamentoResponse> ReturnErrorResponse(Exception exception, string correlationId)
         {
             return BaseReturn<JDPIEfetivarOrdemPagamentoResponse>.FromException(exception, correlationId);
         }

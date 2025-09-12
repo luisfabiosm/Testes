@@ -134,7 +134,15 @@ namespace Domain.Services
 
             ValidateRequired(tpIniciacao, "tpIniciacao", errors);
 
-            ValidateEnum(tpIniciacao, typeof(EnumTpIniciacao), "tpIniciacao", errors);
+            //ValidateEnum(tpIniciacao, typeof(EnumTpIniciacao), "tpIniciacao", errors);
+
+
+            // Verificar se é um valor válido do enum
+            if (!Enum.IsDefined(typeof(EnumTpIniciacao), tpIniciacao))
+            {
+                errors.Add(new ErrorDetails("tpIniciacao", $"{tpIniciacao} deve ser preenchido com domínio válido"));
+                return (errors, false);
+            }
 
             return (errors, errors.Count == 0);
         }

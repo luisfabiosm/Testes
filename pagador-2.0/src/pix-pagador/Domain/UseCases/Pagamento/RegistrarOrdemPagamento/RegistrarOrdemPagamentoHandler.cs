@@ -11,7 +11,7 @@ public class RegistrarOrdemPagamentoHandler : BSUseCaseHandler<TransactionRegist
     {
     }
 
-    protected override async Task<ValidationResult> ExecuteSpecificValidations(TransactionRegistrarOrdemPagamento transaction, CancellationToken cancellationToken)
+    public override async Task<ValidationResult> ExecuteSpecificValidations(TransactionRegistrarOrdemPagamento transaction, CancellationToken cancellationToken)
     {
         var errors = new List<ErrorDetails>();
 
@@ -66,7 +66,7 @@ public class RegistrarOrdemPagamentoHandler : BSUseCaseHandler<TransactionRegist
     }
 
 
-    protected override async Task<JDPIRegistrarOrdemPagamentoResponse> ExecuteTransactionProcessing(TransactionRegistrarOrdemPagamento transaction, CancellationToken cancellationToken)
+    public override async Task<JDPIRegistrarOrdemPagamentoResponse> ExecuteTransactionProcessing(TransactionRegistrarOrdemPagamento transaction, CancellationToken cancellationToken)
     {
         try
         {
@@ -86,7 +86,7 @@ public class RegistrarOrdemPagamentoHandler : BSUseCaseHandler<TransactionRegist
     }
 
 
-    protected override BaseReturn<JDPIRegistrarOrdemPagamentoResponse> ReturnSuccessResponse(JDPIRegistrarOrdemPagamentoResponse result, string message, string correlationId)
+    public override BaseReturn<JDPIRegistrarOrdemPagamentoResponse> ReturnSuccessResponse(JDPIRegistrarOrdemPagamentoResponse result, string message, string correlationId)
     {
         return BaseReturn<JDPIRegistrarOrdemPagamentoResponse>.FromSuccess(
             result,
@@ -96,7 +96,7 @@ public class RegistrarOrdemPagamentoHandler : BSUseCaseHandler<TransactionRegist
     }
 
 
-    protected override BaseReturn<JDPIRegistrarOrdemPagamentoResponse> ReturnErrorResponse(Exception exception, string correlationId)
+    public override BaseReturn<JDPIRegistrarOrdemPagamentoResponse> ReturnErrorResponse(Exception exception, string correlationId)
     {
 
         return BaseReturn<JDPIRegistrarOrdemPagamentoResponse>.FromException(exception, correlationId);

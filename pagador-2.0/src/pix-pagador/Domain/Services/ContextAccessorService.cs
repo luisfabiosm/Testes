@@ -1,6 +1,8 @@
-﻿namespace Domain.Services
+﻿using Domain.Core.Ports.Domain;
+
+namespace Domain.Services
 {
-    public class ContextAccessorService
+    public class ContextAccessorService : IContextAccessorService
     {
         public short GetCanal(HttpContext context)
         {

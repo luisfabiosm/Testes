@@ -17,9 +17,6 @@ namespace Configurations
 
             #region Performance Services 
 
-            // CorrelationId Generator otimizado
-            services.AddSingleton<CorrelationIdGenerator>();
-
             // Configuração de logging otimizado
             services.Configure<LoggerFilterOptions>(options =>
             {
@@ -40,10 +37,10 @@ namespace Configurations
 
             #region Domain Services
 
-            services.AddSingleton<CorrelationIdGenerator>();
+            services.AddSingleton<ICorrelationIdGenerator, CorrelationIdGenerator>();
             services.AddScoped<ITransactionFactory, TransactionFactory>();
             services.AddScoped<IValidatorService, ValidatorService>();
-            services.AddScoped<ContextAccessorService>();
+            services.AddScoped<IContextAccessorService, ContextAccessorService>();
 
 
             #endregion

@@ -6,7 +6,10 @@ namespace Domain.Core.Models.Response
     public record JDPIRegistrarOrdemDevolucaoResponse : BaseTransactionResponse
     {
         public bool pixInterno { get; set; }
-
+        public JDPIRegistrarOrdemDevolucaoResponse()
+        {
+            
+        }
         public JDPIRegistrarOrdemDevolucaoResponse(string result)
         {
 

@@ -13,11 +13,11 @@ namespace Domain.Core.Common.Transaction;
 
 public class TransactionFactory : ITransactionFactory
 {
-    private readonly ContextAccessorService _contextAccessor;
+    private readonly IContextAccessorService _contextAccessor;
 
-    public TransactionFactory(ContextAccessorService contextAccessor)
+    public TransactionFactory(IContextAccessorService contextAccessor)
     {
-        _contextAccessor = contextAccessor;
+        _contextAccessor = contextAccessor ?? throw new ArgumentNullException(nameof(contextAccessor));
     }
 
     public TransactionRegistrarOrdemPagamento CreateRegistrarOrdemPagamento(

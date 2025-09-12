@@ -18,7 +18,7 @@ public class BSMediator
         _serviceProvider = serviceProvider;
     }
 
-    public async Task<TResponse> Send<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default)
+    public virtual async Task<TResponse> Send<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken = default)
         where TRequest : IBSRequest<TResponse>
     {
         var requestType = typeof(TRequest);

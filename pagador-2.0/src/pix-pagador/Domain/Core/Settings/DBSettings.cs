@@ -13,6 +13,10 @@ namespace Domain.Core.Settings
         public int ConnectTimeout { get; set; } = 10;
         public int Port { get; set; }
 
+        public DBSettings()
+        {
+            
+        }
         public string GetConnectionString()
         {
             var _ConnectTimeout = ConnectTimeout == 0 ? 20 : ConnectTimeout;
@@ -21,20 +25,12 @@ namespace Domain.Core.Settings
 
         }
 
-        public string GetNoSQLConnectionString()
+        public string GetConnectionNoCryptString()
         {
+            var _ConnectTimeout = ConnectTimeout == 0 ? 20 : ConnectTimeout;
 
-            return string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password)
-                   ? $"MongoDbCondition://{ServerUrl}/?authSource=admin"
-                   : $"MongoDbCondition://{Username}:{Password}@{ServerUrl}/?authSource=admin";
-        }
+            return $"Data Source={ServerUrl};Initial Catalog={Database};TrustServerCertificate=True;Persist Security Info=True;User ID={Username};Password={Password};MultipleActiveResultSets=true;Connect Timeout={_ConnectTimeout};Enlist=false";
 
-        public string GetNoSQLConnectionStringReplicaSet()
-        {
-
-            return string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password)
-               ? $"MongoDbCondition://{ServerUrl}/?replicaSet=rs0"
-               : $"MongoDbCondition://{Username}:{Password}@{ServerUrl}/?authSource=admin&replicaSet=rs0";
         }
 
     }

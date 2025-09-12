@@ -5,6 +5,11 @@
         public string mensagens { get; set; }
         public string campo { get; set; }
 
+
+        public ErrorDetails()
+        {
+            
+        }
         public ErrorDetails(string propertyName, string message)
         {
             mensagens = message;

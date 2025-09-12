@@ -1,4 +1,6 @@
-﻿namespace Domain.Core.Common.ResultPattern;
+﻿
+
+namespace Domain.Core.Common.ResultPattern;
 
 public readonly struct Result<T>
 {

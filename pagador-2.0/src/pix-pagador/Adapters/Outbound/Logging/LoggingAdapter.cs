@@ -14,9 +14,9 @@ namespace Adapters.Outbound.Logging
 
 
         public LoggingAdapter(
-             string sourceName)
+             string? sourceName)
         {
-            _activitySource = new ActivitySource(sourceName);
+            _activitySource = new ActivitySource(sourceName??"");
         }
 
         public void AddProperty(string key, string value)
