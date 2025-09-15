@@ -195,7 +195,7 @@ namespace Domain.Services
 
         private void ValidateRequired<T>(T value, string fieldName, List<ErrorDetails> errors)
         {
-            if (value == null || value.Equals(default(T)) || (value is string s && string.IsNullOrWhiteSpace(s)))
+            if (value == null || value.Equals(default(T)) || (value is string s && string.IsNullOrEmpty(s)) || (value is string t && string.IsNullOrWhiteSpace(t)))
             {
                 errors.Add(new ErrorDetails(fieldName, $"{fieldName} deve ser informado e nao pode ser nulo"));
             }

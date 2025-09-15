@@ -28,6 +28,9 @@
       "[*]*Startup*"
     </CoverletExclude>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Domain\UseCases\Pagamento\Class1.cs" />
+  </ItemGroup>
 
 <ItemGroup>
   <!-- Framework de Testes -->
