@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace></RootNamespace>
+    <UserSecretsId>c2daa024-5335-488a-82e5-fffb7afbd913</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <AssemblyName>api-crud-template</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Domain\Core\Interfaces\Inbound\" />
+    <Folder Include="Domain\Core\Interfaces\Outbound\" />
+    <Folder Include="Configurations\" />
+    <Folder Include="Domain\Core\SharedKernel\ResultPattern\" />
+    <Folder Include="Domain\UseCases\DeleteUser\" />
+    <Folder Include="Domain\UseCases\GetUserById\" />
+    <Folder Include="Domain\UseCases\ListUsers\" />
+    <Folder Include="Domain\UseCases\UpdateUserInfo\" />
+    <Folder Include="Inbound\API\Endpoints\" />
+    <Folder Include="Inbound\API\Middlewares\" />
+    <Folder Include="Main\" />
+    <Folder Include="Outbound\Database\SQL\" />
+    <Folder Include="Outbound\Logging\" />
+  </ItemGroup>
+
+</Project>
