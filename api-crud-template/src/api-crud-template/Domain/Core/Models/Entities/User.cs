@@ -5,27 +5,31 @@ namespace Domain.Core.Models.Entities
 {
     public sealed record User
     {
-        public int CPF { get; private set; } 
+        public Guid Id { get; private set; }
+        public string CPF { get; private set; } 
         public string Nome { get; private set; } = string.Empty;
         public string Login { get; private set; }
         public EnumStatus Status { get; private set; }
-        public DateTime Nascimento { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
 
         public DateTime? DataUltimaMovimentacao { get; private set; }
 
-        public static User Novo(int numero, string nome, string email, string login, string password, DateTime nascimento)
+        public User()
+        {
+            
+        }
+        public static User Novo(string cpf, string nome, string email, string login, string password)
         {
             return new User
             {
-                CPF = numero,
+                Id = Guid.NewGuid(),
+                CPF = cpf,
                 Nome = nome,
                 Status = EnumStatus.Ativo,
                 Email= email,
                 Login = login,
                 Password = password,
-                Nascimento = nascimento,
                 DataUltimaMovimentacao = DateTime.UtcNow
 
             };

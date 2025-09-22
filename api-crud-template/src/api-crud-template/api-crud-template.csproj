@@ -8,26 +8,50 @@
     <UserSecretsId>c2daa024-5335-488a-82e5-fffb7afbd913</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <AssemblyName>api-crud-template</AssemblyName>
+    <Version>1.0.0</Version>
+    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
-  </ItemGroup>
+    <!-- Pacotes essenciais para Clean Architecture -->
 
-  <ItemGroup>
-    <Folder Include="Domain\Core\Interfaces\Inbound\" />
-    <Folder Include="Domain\Core\Interfaces\Outbound\" />
-    <Folder Include="Configurations\" />
-    <Folder Include="Domain\Core\SharedKernel\ResultPattern\" />
-    <Folder Include="Domain\UseCases\DeleteUser\" />
-    <Folder Include="Domain\UseCases\GetUserById\" />
-    <Folder Include="Domain\UseCases\ListUsers\" />
-    <Folder Include="Domain\UseCases\UpdateUserInfo\" />
-    <Folder Include="Inbound\API\Endpoints\" />
-    <Folder Include="Inbound\API\Middlewares\" />
-    <Folder Include="Main\" />
-    <Folder Include="Outbound\Database\SQL\" />
-    <Folder Include="Outbound\Logging\" />
+    <!-- Minimal APIs e Swagger -->
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
+    <PackageReference Include="Polly" Version="8.6.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+
+    <!-- Autenticação JWT -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
+
+    <!-- Acesso a Dados com Dapper -->
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+
+    <!-- OpenTelemetry para Observabilidade -->
+    <PackageReference Include="OpenTelemetry" Version="1.9.0" />
+    <PackageReference Include="OpenTelemetry.Api" Version="1.9.0" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.9.0" />
+    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.9.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.9.0" />
+
+    <!-- Logging estruturado -->
+    <PackageReference Include="Serilog" Version="4.0.1" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.2" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" />
+
+    <!-- Health Checks -->
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.8" />
+
+    <!-- Docker Tools -->
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
   </ItemGroup>
 
 </Project>

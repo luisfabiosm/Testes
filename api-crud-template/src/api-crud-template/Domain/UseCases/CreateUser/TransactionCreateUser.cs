@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using System.Drawing;
 using System.Security.Cryptography.Xml;
 
-namespace Domain.UseCases.AddUser
+namespace Domain.UseCases.CreateUser
 {
-    public record TransactionAddUser : BaseTransaction
+    public record TransactionCreateUser : BaseTransaction
     {
         public required User NewUser { get; set; }
 

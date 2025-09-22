@@ -3,7 +3,8 @@
 
 using Domain.Core.Interfaces.Domain;
 using Domain.Core.Models.Request;
-using Domain.UseCases.AddUser;
+using Domain.UseCases.CreateUser;
+using System.Security.Claims;
 
 namespace Domain.Core.SharedKernel.Transactions;
 
@@ -14,9 +15,9 @@ public class TransactionFactory : ITransactionFactory
     {
     }
 
-    public TransactionAddUser CreateAddUserTransaction(HttpContext context, AddNewUserRequest request, string correlationId)
+    public TransactionCreateUser CreateUserTransaction(HttpContext context, CreateUserRequest request, string correlationId)
     {
-        return new TransactionAddUser
+        return new TransactionCreateUser
         {
             CorrelationId = correlationId,
             Code = 1,
@@ -28,19 +29,28 @@ public class TransactionFactory : ITransactionFactory
 
     internal short GetCanal(HttpContext context)
     {
-        var claim = context.User.FindFirst("Canal")?.Value;
+        if (Global.ENVIRONMENT == "Mock")
+            return 1;
 
-        if (string.IsNullOrWhiteSpace(claim))
-            throw new UnauthorizedAccessException("Claim obrigatória 'Canal' não encontrada.");
+      
+        var canalValue = context.User.FindFirst("Canal")?.Value ??
+                         context.Request.Headers["Canal"].FirstOrDefault();
 
-        if (!short.TryParse(claim, out var canal))
-            throw new FormatException("Claim 'Canal' inválida.");
+        if (string.IsNullOrWhiteSpace(canalValue))
+            throw new ArgumentException("Canal não encontrado no Claim ou Header.");
+
+        if (!short.TryParse(canalValue, out var canal))
+            throw new FormatException("Canal deve ser um número válido.");
 
         return canal;
     }
 
     internal string GetChaveIdempotencia(HttpContext context)
     {
+        if (Global.ENVIRONMENT == "Mock" )   
+            return "teste";
+
+
         if (!context.Request.Headers.TryGetValue("Chave-Idempotencia", out var chave) || string.IsNullOrWhiteSpace(chave))
             throw new ArgumentException("Cabeçalho obrigatório 'Chave-Idempotencia' não encontrado ou vazio.");
 

@@ -2,13 +2,11 @@
 {
     public record AppSettings
     {
-        public DBSettings DB { get; set; }
+        public DatabaseSettings DB { get; set; } = new();
+        public JwtSettings Jwt { get; set; } = new();
+        public OtlpSettings? Otlp { get; set; } = new();
+        public SerilogSettings Serilog { get; set; } = new();
 
-        public SPASettings SPA { get; set; }
-
-        public OtlpSettings Otlp { get; set; }
-
-        public GCSrvSettings GC { get; set; }
 
         public AppSettings()
         {

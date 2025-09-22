@@ -1,11 +1,11 @@
 ﻿using Domain.Core.Models.Request;
-using Domain.UseCases.AddUser;
+using Domain.UseCases.CreateUser;
 
 namespace Domain.Core.Interfaces.Domain
 {
     public interface ITransactionFactory
     {
-        TransactionAddUser CreateAddUserTransaction(HttpContext context, AddNewUserRequest request, string correlationId);
+        TransactionCreateUser CreateUserTransaction(HttpContext context, CreateUserRequest request, string correlationId);
 
     }
 }
