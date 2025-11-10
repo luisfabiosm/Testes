@@ -11,6 +11,15 @@ namespace Domain.Core.Models.Request
         public string Login { get; set; }
         public string Password { get; set; }
 
+        public CreateUserRequest(string cpf, string nome, DateTime nascimento, string email, string login, string password)
+        {
+            CPF = cpf.Replace(".", "").Replace("-", "");    
+            Nome = nome.Trim(); 
+            Nascimento = nascimento;
+            Email = email.Trim().ToLower();
+            Login = login;
+            Password = password;
+        }
 
         public User ToUser()
         {

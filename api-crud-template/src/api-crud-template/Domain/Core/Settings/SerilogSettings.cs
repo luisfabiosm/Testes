@@ -3,6 +3,5 @@
 
     public record SerilogSettings
     {
-        public MinimumLevelSettings MinimumLevel { get; set; } = new();
     }
 }

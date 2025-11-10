@@ -55,10 +55,6 @@ public class ExceptionHandlingMiddleware
                 errorResponse = ErrorResponse.Unauthorized(exception.Message);
                 break;
 
-            case KeyNotFoundException:
-                response.StatusCode = (int)HttpStatusCode.NotFound;
-                errorResponse = ErrorResponse.NotFound(exception.Message);
-                break;
 
             case TimeoutException:
                 response.StatusCode = (int)HttpStatusCode.RequestTimeout;

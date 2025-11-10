@@ -15,6 +15,11 @@ public record ErrorResponse
     public string RequestId { get; init; } = Activity.Current?.Id ?? Guid.NewGuid().ToString();
     public Dictionary<string, string[]>? Errors { get; init; }
 
+    public ErrorResponse()
+    {
+        
+    }
+
     public static ErrorResponse BadRequest(string detail, Dictionary<string, string[]>? errors = null)
     {
         return new ErrorResponse
@@ -24,17 +29,6 @@ public record ErrorResponse
             Status = 400,
             Detail = detail,
             Errors = errors
-        };
-    }
-
-    public static ErrorResponse NotFound(string detail)
-    {
-        return new ErrorResponse
-        {
-            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
-            Title = "Not Found",
-            Status = 404,
-            Detail = detail
         };
     }
 
@@ -60,14 +54,5 @@ public record ErrorResponse
         };
     }
 
-    public static ErrorResponse Forbidden(string detail = "Acesso negado para este recurso")
-    {
-        return new ErrorResponse
-        {
-            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.3",
-            Title = "Forbidden",
-            Status = 403,
-            Detail = detail
-        };
-    }
+    
 }

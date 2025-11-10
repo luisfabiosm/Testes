@@ -48,5 +48,18 @@ namespace Domain.Core.Settings
 
             return Encoding.UTF8.GetString(DESEncrypt.TransformFinalBlock(Buffer, 0, Buffer.Length));
         }
+
+        public static string encryptDES(string plainPassword)
+        {
+            string chave = "w3@sb1r0";
+            using var des = new DESCryptoServiceProvider();
+            des.Mode = CipherMode.ECB;
+            des.Key = Encoding.UTF8.GetBytes(chave);
+            des.Padding = PaddingMode.PKCS7;
+            using var encryptor = des.CreateEncryptor();
+            byte[] inputBytes = Encoding.UTF8.GetBytes(plainPassword);
+            byte[] encryptedBytes = encryptor.TransformFinalBlock(inputBytes, 0, inputBytes.Length);
+            return Convert.ToBase64String(encryptedBytes);
+        }
     }
 }

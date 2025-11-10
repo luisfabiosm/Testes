@@ -1,0 +1,221 @@
+# Script para corrigir especificamente o erro testhost.deps.json com WebApplicationFactory
+# Uso: ./fix-webappfactory-testhost.ps1
+
+param(
+    [switch]$Verbose = $false
+)
+
+$ErrorActionPreference = "Stop"
+
+Write-Host "🔧 Corrigindo erro testhost.deps.json para WebApplicationFactory..." -ForegroundColor Cyan
+
+# 1. ENCONTRAR O PROJETO PRINCIPAL
+Write-Host "1. Procurando projeto principal..." -ForegroundColor Blue
+
+$possibleMainProjects = @(
+    "src/api-crud-template/api-crud-template.csproj",
+    "api-crud-template/api-crud-template.csproj", 
+    "src/api-crud-template-testes/api-crud-template-testes.csproj",
+    "api-crud-template-testes/api-crud-template-testes.csproj"
+)
+
+$mainProject = $null
+foreach ($proj in $possibleMainProjects) {
+    if (Test-Path $proj) {
+        $mainProject = $proj
+        Write-Host "✅ Projeto principal encontrado: $mainProject" -ForegroundColor Green
+        break
+    }
+}
+
+if (-not $mainProject) {
+    Write-Host "❌ Projeto principal não encontrado nos caminhos:" -ForegroundColor Red
+    $possibleMainProjects | ForEach-Object { Write-Host "   - $_" -ForegroundColor Gray }
+    exit 1
+}
+
+# 2. ENCONTRAR O PROJETO DE TESTES
+Write-Host "2. Procurando projeto de testes..." -ForegroundColor Blue
+
+$possibleTestProjects = @(
+    "api-crud-template.Tests/api-crud-template.Tests.csproj",
+    "Tests/api-crud-template.Tests.csproj",
+    "src/api-crud-template.Tests/api-crud-template.Tests.csproj"
+)
+
+$testProject = $null
+foreach ($proj in $possibleTestProjects) {
+    if (Test-Path $proj) {
+        $testProject = $proj
+        Write-Host "✅ Projeto de testes encontrado: $testProject" -ForegroundColor Green
+        break
+    }
+}
+
+if (-not $testProject) {
+    Write-Host "❌ Projeto de testes não encontrado nos caminhos:" -ForegroundColor Red
+    $possibleTestProjects | ForEach-Object { Write-Host "   - $_" -ForegroundColor Gray }
+    exit 1
+}
+
+# 3. ADICIONAR PROPRIEDADES NO PROJETO PRINCIPAL
+Write-Host "3. Configurando projeto principal para WebApplicationFactory..." -ForegroundColor Blue
+
+$mainContent = Get-Content $mainProject -Raw
+$modified = $false
+
+# Propriedades necessárias para WebApplicationFactory
+$requiredProperties = @{
+    "PreserveCompilationContext" = "true"
+    "GenerateRuntimeConfigurationFiles" = "true" 
+    "GenerateDependencyFile" = "true"
+}
+
+foreach ($prop in $requiredProperties.GetEnumerator()) {
+    if (-not $mainContent.Contains("<$($prop.Key)>")) {
+        $newProperty = "`n    <$($prop.Key)>$($prop.Value)</$($prop.Key)>"
+        $mainContent = $mainContent -replace '(<PropertyGroup[^>]*>)', "`$1$newProperty"
+        $modified = $true
+        Write-Host "   ✅ Adicionado $($prop.Key) = $($prop.Value)" -ForegroundColor Green
+    } else {
+        Write-Host "   ✓ $($prop.Key) já existe" -ForegroundColor Gray
+    }
+}
+
+if ($modified) {
+    Set-Content $mainProject $mainContent -Encoding UTF8
+    Write-Host "✅ Projeto principal atualizado" -ForegroundColor Green
+} else {
+    Write-Host "✓ Projeto principal já estava configurado" -ForegroundColor Gray
+}
+
+# 4. VERIFICAR REFERÊNCIA NO PROJETO DE TESTES
+Write-Host "4. Verificando referência do projeto de testes..." -ForegroundColor Blue
+
+$testContent = Get-Content $testProject -Raw
+$mainProjectName = (Split-Path $mainProject -Leaf) -replace '\.csproj$', ''
+$mainProjectPath = Resolve-Path $mainProject -Relative
+
+# Verificar se a referência existe e está correta
+if ($testContent -notmatch "ProjectReference.*$mainProjectName" -and $testContent -notmatch "ProjectReference.*$(Split-Path $mainProject -Parent)") {
+    Write-Host "   ⚠️ Referência ao projeto principal pode estar incorreta" -ForegroundColor Yellow
+    Write-Host "   Referência atual esperada: $mainProjectPath" -ForegroundColor Gray
+    
+    # Adicionar referência se não existir
+    if ($testContent -notmatch "ProjectReference") {
+        $referenceXml = @"
+
+  <ItemGroup>
+    <ProjectReference Include="$mainProjectPath" />
+  </ItemGroup>
+"@
+        $testContent = $testContent -replace '(</Project>)', "$referenceXml`n`$1"
+        Set-Content $testProject $testContent -Encoding UTF8
+        Write-Host "   ✅ Referência adicionada ao projeto de testes" -ForegroundColor Green
+    }
+} else {
+    Write-Host "   ✓ Referência ao projeto principal encontrada" -ForegroundColor Gray
+}
+
+# 5. LIMPAR E RECOMPILAR
+Write-Host "5. Limpando e recompilando projetos..." -ForegroundColor Blue
+
+# Limpar tudo
+Write-Host "   Limpando builds..." -ForegroundColor Gray
+& dotnet clean --verbosity quiet
+
+# Remover bin/obj especificamente
+$binObjDirs = Get-ChildItem -Recurse -Directory | Where-Object { $_.Name -eq "bin" -or $_.Name -eq "obj" }
+foreach ($dir in $binObjDirs) {
+    Remove-Item $dir.FullName -Recurse -Force -ErrorAction SilentlyContinue
+    if ($Verbose) {
+        Write-Host "   Removido: $($dir.FullName)" -ForegroundColor Gray
+    }
+}
+
+# Restaurar
+Write-Host "   Restaurando dependências..." -ForegroundColor Gray
+& dotnet restore --force --verbosity quiet
+
+# Build projeto principal primeiro
+Write-Host "   Compilando projeto principal..." -ForegroundColor Gray
+& dotnet build $mainProject --configuration Debug --no-restore --verbosity quiet
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "❌ Falha na compilação do projeto principal" -ForegroundColor Red
+    exit 1
+}
+
+# Build projeto de testes
+Write-Host "   Compilando projeto de testes..." -ForegroundColor Gray  
+& dotnet build $testProject --configuration Debug --no-restore --verbosity quiet
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "❌ Falha na compilação do projeto de testes" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "✅ Compilação concluída" -ForegroundColor Green
+
+# 6. VERIFICAR SE TESTHOST.DEPS.JSON FOI CRIADO
+Write-Host "6. Verificando se testhost.deps.json foi criado..." -ForegroundColor Blue
+
+$mainProjectDir = Split-Path $mainProject -Parent
+$testHostFiles = Get-ChildItem -Path $mainProjectDir -Recurse -Name "testhost.deps.json" -ErrorAction SilentlyContinue
+
+if ($testHostFiles) {
+    Write-Host "✅ Arquivo(s) testhost.deps.json encontrado(s):" -ForegroundColor Green
+    $testHostFiles | ForEach-Object { Write-Host "   $_" -ForegroundColor Gray }
+} else {
+    Write-Host "⚠️ testhost.deps.json não encontrado, mas pode ser gerado durante os testes" -ForegroundColor Yellow
+}
+
+# 7. EXECUTAR O TESTE ESPECÍFICO
+Write-Host "7. Testando especificamente o health check..." -ForegroundColor Blue
+
+# Primeiro tentar executar apenas o teste problemático
+$testFilter = "*HealthCheck*"
+Write-Host "   Executando teste: $testFilter" -ForegroundColor Gray
+
+if ($Verbose) {
+    & dotnet test --filter $testFilter --verbosity detailed --no-build
+} else {
+    & dotnet test --filter $testFilter --verbosity normal --no-build
+}
+
+$testResult = $LASTEXITCODE
+
+# 8. RESULTADO
+Write-Host ""
+Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host " RESULTADO DA CORREÇÃO" -ForegroundColor Cyan  
+Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
+
+if ($testResult -eq 0) {
+    Write-Host "🎉 PROBLEMA RESOLVIDO!" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "✅ O teste de health check agora está funcionando" -ForegroundColor Green
+    Write-Host "✅ WebApplicationFactory configurado corretamente" -ForegroundColor Green
+    Write-Host "✅ testhost.deps.json sendo gerado adequadamente" -ForegroundColor Green
+} else {
+    Write-Host "⚠️ TESTE AINDA ESTÁ FALHANDO" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "🔍 Possíveis próximos passos:" -ForegroundColor Blue
+    Write-Host "   1. Verificar se o projeto principal é Web (Sdk='Microsoft.NET.Sdk.Web')" -ForegroundColor Gray
+    Write-Host "   2. Verificar se há classe Program no projeto principal" -ForegroundColor Gray
+    Write-Host "   3. Executar com mais detalhes: dotnet test --filter '*HealthCheck*' --verbosity diagnostic" -ForegroundColor Gray
+    Write-Host "   4. Verificar se o endpoint /health existe no projeto principal" -ForegroundColor Gray
+}
+
+Write-Host ""
+Write-Host "📝 Configurações aplicadas:" -ForegroundColor Cyan
+Write-Host "   - PreserveCompilationContext = true (projeto principal)" -ForegroundColor Gray
+Write-Host "   - GenerateRuntimeConfigurationFiles = true (projeto principal)" -ForegroundColor Gray
+Write-Host "   - GenerateDependencyFile = true (projeto principal)" -ForegroundColor Gray
+Write-Host "   - Referência de projeto verificada" -ForegroundColor Gray
+
+Write-Host ""
+Write-Host "🎯 Para executar novamente o teste específico:" -ForegroundColor Blue
+Write-Host "   dotnet test --filter '*HealthCheck*'" -ForegroundColor Gray
+
+exit $testResult

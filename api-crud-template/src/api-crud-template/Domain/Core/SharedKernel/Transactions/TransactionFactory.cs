@@ -15,6 +15,7 @@ public class TransactionFactory : ITransactionFactory
     {
     }
 
+
     public TransactionCreateUser CreateUserTransaction(HttpContext context, CreateUserRequest request, string correlationId)
     {
         return new TransactionCreateUser
@@ -31,8 +32,7 @@ public class TransactionFactory : ITransactionFactory
     {
         if (Global.ENVIRONMENT == "Mock")
             return 1;
-
-      
+        
         var canalValue = context.User.FindFirst("Canal")?.Value ??
                          context.Request.Headers["Canal"].FirstOrDefault();
 
@@ -56,5 +56,6 @@ public class TransactionFactory : ITransactionFactory
 
         return chave.ToString();
     }
+
 }
 

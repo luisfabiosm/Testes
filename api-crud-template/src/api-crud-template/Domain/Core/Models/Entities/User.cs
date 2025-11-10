@@ -6,19 +6,20 @@ namespace Domain.Core.Models.Entities
     public sealed record User
     {
         public Guid Id { get; private set; }
-        public string CPF { get; private set; } 
+        public string CPF { get; private set; } = string.Empty;     
         public string Nome { get; private set; } = string.Empty;
-        public string Login { get; private set; }
+        public string Login { get; set; } = string.Empty;
         public EnumStatus Status { get; private set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
 
-        public DateTime? DataUltimaMovimentacao { get; private set; }
+        public DateTime DataUltimaMovimentacao { get; private set; }
 
         public User()
         {
             
         }
+
         public static User Novo(string cpf, string nome, string email, string login, string password)
         {
             return new User
@@ -34,7 +35,6 @@ namespace Domain.Core.Models.Entities
 
             };
         }
-
 
         public bool Habilitado() => (Status == EnumStatus.Ativo) ? true: false;
 

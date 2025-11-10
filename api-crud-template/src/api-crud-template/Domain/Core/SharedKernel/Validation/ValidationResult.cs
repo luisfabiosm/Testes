@@ -2,6 +2,7 @@
 {
     public class ValidationResult
     {
+  
         public bool IsValid { get; private set; }
         public List<ValidationError> Errors { get; private set; }
 
@@ -17,7 +18,13 @@
 
         public static ValidationResult Failure(ValidationError error) => new(false, new List<ValidationError> { error });
 
-        public string GetErrorsAsString() => string.Join("; ", Errors.Select(e => e.Message));
+        public string ErrorsAsString
+        {
+            get
+            {
+                return string.Join("; ", Errors.Select(e => e.Message));
+            }
+        }
     }
 
 }
