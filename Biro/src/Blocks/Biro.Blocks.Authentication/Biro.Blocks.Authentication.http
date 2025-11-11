@@ -1,0 +1,6 @@
+@Biro.Blocks.Authentication_HostAddress = http://localhost:5091
+
+GET {{Biro.Blocks.Authentication_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

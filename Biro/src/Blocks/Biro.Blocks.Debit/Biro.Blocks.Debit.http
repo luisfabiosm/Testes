@@ -1,0 +1,6 @@
+@Biro.Blocks.Debit_HostAddress = http://localhost:5104
+
+GET {{Biro.Blocks.Debit_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

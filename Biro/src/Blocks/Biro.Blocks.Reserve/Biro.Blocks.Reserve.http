@@ -1,0 +1,6 @@
+@Biro.Blocks.Reserve_HostAddress = http://localhost:5077
+
+GET {{Biro.Blocks.Reserve_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
